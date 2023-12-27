@@ -1,0 +1,65 @@
+{
+  "Comment": "Create CloudFront Distribution Workflow",
+  "StartAt": "CreateDistribution",
+  "States": {
+    "CreateDistribution": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::aws-sdk:cloudfront:createDistribution",
+      "Parameters": {
+        "DistributionConfig": {
+          "CallerReference.$": "$.CallerReference",
+          "Comment": "Your new distribution comment",
+          "Enabled": true,
+          "DefaultCacheBehavior": {
+            "TargetOriginId.$": "$.TargetOriginId",
+            "ViewerProtocolPolicy": "allow-all",
+            "MinTTL": 60,
+            "ForwardedValues": {
+              "QueryString": false,
+              "Cookies": {
+                "Forward": "none"
+              }
+            }
+          },
+          "Origins": {
+            "Quantity": 1,
+            "Items": [
+              {
+                "Id.$": "$.TargetOriginId",
+                "DomainName": "stepfunctionsss.s3.eu-central-1.amazonaws.com",
+                "S3OriginConfig": {
+                  "OriginAccessIdentity": ""
+                }
+              }
+            ]
+          },
+          "ViewerCertificate": {
+            "AcmCertificateArn": "arn:aws:acm:us-east-1:133521243113:certificate/a8fa5da3-6bb2-4df7-a3f1-10d79bb54678",
+            "SslSupportMethod": "sni-only"
+          }
+        }
+      },
+      "Next": "InvalidatetheCache"
+    },
+    "InvalidatetheCache": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::aws-sdk:cloudfront:createInvalidation",
+      "Parameters": {
+        "DistributionId.$": "$.Distribution.Id",
+        "InvalidationBatch": {
+          "Paths": {
+            "Quantity": 1,
+            "Items": [
+              "/*"
+            ]
+          },
+          "CallerReference": "$.CallerReference"
+        }
+      },
+      "Next": "Success-of-process"
+    },
+    "Success-of-process": {
+      "Type": "Succeed"
+    }
+  }
+}

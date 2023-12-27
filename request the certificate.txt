@@ -1,0 +1,28 @@
+{
+  "Comment": "A description of my state machine",
+  "StartAt": "RequestACMCertificate",
+  "States": {
+    "RequestACMCertificate": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::aws-sdk:acm:requestCertificate",
+      "Parameters": {
+        "DomainName": "customer11.kloudguru.co.uk",
+        "ValidationMethod": "DNS"
+      },
+      "ResultPath": "$.Certificate",
+      "Next": "Success-of-process"
+    },
+    "Success-of-process": {
+      "Type": "Succeed"
+    }
+  }
+}
+
+
+
+                       input for this code
+ 
+        
+               {
+                 "DomainName": "customer11.kloudguru.co.uk"
+               }
