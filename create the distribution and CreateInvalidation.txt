@@ -28,7 +28,7 @@
                 "Id.$": "$.TargetOriginId",
                 "DomainName": "stepfunctionsss.s3.eu-central-1.amazonaws.com",
                 "S3OriginConfig": {
-                  "OriginAccessIdentity": ""
+                  "OriginAccessIdentity": "origin-access-identity/cloudfront/E7XHKTGVA1PUQ"
                 }
               }
             ]
@@ -63,3 +63,17 @@
     }
   }
 }
+
+
+
+
+
+                 input for this code 
+         
+{
+  "CallerReference": "cdn",
+  "TargetOriginId": "stepfunctionsss",
+  "Id": "stepfunctionsss",
+  "s3domain": "stepfunctionsss.s3.amazonaws.com"
+}
+
